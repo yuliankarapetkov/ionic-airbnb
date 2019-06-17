@@ -1,0 +1,7 @@
+{
+  "appId": "com.udemy.ionicairbnb",
+  "appName": "ionic-airbnb",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www"
+}

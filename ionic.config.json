@@ -1,5 +1,7 @@
 {
   "name": "ionic-airbnb",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }

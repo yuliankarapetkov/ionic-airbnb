@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>discover</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" size-sm="8" offset-sm="2" text-center>
+
+        <ion-card>
+
+          <ion-card-header>
+            <ion-card-title>
+              {{ places[0]?.title }}
+            </ion-card-title>
+            <ion-card-subtitle>
+              {{ places[0]?.price | currency }} / Night
+            </ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-img [src]="places[0]?.imageUrl"></ion-img>
+
+          <ion-card-content>
+            <p>
+              {{ places[0]?.description }}
+            </p>
+          </ion-card-content>
+
+          <div>
+            <ion-button fill="clear" color="primary" [routerLink]="['/', 'places', 'tabs', 'discover', places[0].id]">
+              More
+            </ion-button>
+          </div>
+
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12" size-sm="8" offset-sm="2" text-center>
+
+        <ion-list>
+          <ion-item 
+            *ngFor="let place of places.slice(1)" 
+            [routerLink]="['/', 'places', 'tabs', 'discover', place.id]"
+            detail>
+
+            <ion-thumbnail slot="start">
+              <ion-img [src]="place.imageUrl"></ion-img>
+            </ion-thumbnail>
+
+            <ion-label>
+              <h2>{{ place.title }}</h2>
+              <p>{{ place.description }}</p>
+            </ion-label>
+
+          </ion-item>
+        </ion-list>
+
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>
