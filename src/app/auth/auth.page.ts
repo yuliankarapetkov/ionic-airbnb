@@ -21,18 +21,16 @@ export class AuthPage implements OnInit {
   ngOnInit() {
   }
 
-  logIn(): void {
+  async logIn(): Promise<void> {
     this.authService.logIn();
 
-    this.loadingController
-      .create({ keyboardClose: true, message: 'Logging in..' })
-      .then(loadingElement => {
-        loadingElement.present();
+    const loadingElement = await this.loadingController.create({ keyboardClose: true, message: 'Logging in..' });
 
-        setTimeout(() => {
-          loadingElement.dismiss();
-          this.router.navigateByUrl('/places/tabs/discover');
-        }, 1500)
-      });
+    loadingElement.present();
+
+    setTimeout(() => {
+      loadingElement.dismiss();
+      this.router.navigateByUrl('/places/tabs/discover');
+    }, 1500);
   }
 }
