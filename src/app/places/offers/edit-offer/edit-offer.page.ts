@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { NavController } from '@ionic/angular';
 
@@ -13,11 +14,13 @@ import { PlacesService } from '../../places.service';
 })
 export class EditOfferPage implements OnInit {
   offer: Place;
+  offerForm: FormGroup;
 
   constructor(
     private route: ActivatedRoute,
     private navController: NavController,
-    private placesService: PlacesService
+    private placesService: PlacesService,
+    private formBuilder: FormBuilder
   ) { }
 
   ngOnInit() {
@@ -31,6 +34,15 @@ export class EditOfferPage implements OnInit {
 
         const placeId = paramMap.get('placeId');
         this.offer = this.placesService.getPlace(placeId);
+
+        this.offerForm = this.formBuilder.group({
+          title: [this.offer.title, [Validators.required]],
+          description: [this.offer.description, [Validators.required, Validators.maxLength(180)]]
+        });
       });
+  }
+
+  updateOffer(): void {
+    console.log(this.offerForm.value)
   }
 }
