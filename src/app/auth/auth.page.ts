@@ -1,5 +1,6 @@
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 import { LoadingController } from '@ionic/angular';
 
@@ -32,5 +33,9 @@ export class AuthPage implements OnInit {
       loadingElement.dismiss();
       this.router.navigateByUrl('/places/tabs/discover');
     }, 1500);
+  }
+
+  onSubmit(form: NgForm): void {
+    console.log(form);
   }
 }
