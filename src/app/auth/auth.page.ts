@@ -12,6 +12,7 @@ import { AuthService } from './auth.service';
   styleUrls: ['./auth.page.scss'],
 })
 export class AuthPage implements OnInit {
+  isLoginMode = true;
 
   constructor(
     private authService: AuthService,
@@ -33,6 +34,10 @@ export class AuthPage implements OnInit {
       loadingElement.dismiss();
       this.router.navigateByUrl('/places/tabs/discover');
     }, 1500);
+  }
+
+  switchAuthMode(): void {
+    this.isLoginMode = !this.isLoginMode;
   }
 
   onSubmit(form: NgForm): void {
