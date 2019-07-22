@@ -7,9 +7,33 @@ import { Place } from './place.model';
 })
 export class PlacesService {
   private _places: Place[] = [
-    new Place('p1', 'Manhattan Mansion', 'In the heart of NY City', 'http://homesoftherich.net/wp-content/uploads/2009/12/Picture-17.png', 149.99),
-    new Place('p2', 'Plovdiv Mansion', 'In the heart of Plovdiv', 'http://homesoftherich.net/wp-content/uploads/2009/12/Picture-17.png', 19.99),
-    new Place('p3', 'Sofia Mansion', 'In the heart of Sofia', 'https://s-ec.bstatic.com/images/hotel/max1024x768/177/177415157.jpg', 29.99)
+    new Place(
+      'p1', 
+      'Manhattan Mansion', 
+      'In the heart of NY City', 
+      'http://homesoftherich.net/wp-content/uploads/2009/12/Picture-17.png', 
+      149.99,
+      new Date('2019-01-01'),
+      new Date('2019-12-31')
+    ),
+    new Place(
+      'p2', 
+      'Plovdiv Mansion', 
+      'In the heart of Plovdiv', 
+      'http://homesoftherich.net/wp-content/uploads/2009/12/Picture-17.png', 
+      19.99,
+      new Date('2019-01-01'),
+      new Date('2019-12-31')
+    ),
+    new Place(
+      'p3', 
+      'Sofia Mansion', 
+      'In the heart of Sofia', 
+      'https://s-ec.bstatic.com/images/hotel/max1024x768/177/177415157.jpg', 
+      29.99,
+      new Date('2019-01-01'),
+      new Date('2019-12-31')
+    )
   ];
 
   constructor() { }
