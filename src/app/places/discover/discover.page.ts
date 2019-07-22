@@ -24,8 +24,6 @@ export class DiscoverPage implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-
-
     this.placesService
       .places$
       .pipe(takeUntil(this._componentAlive$))

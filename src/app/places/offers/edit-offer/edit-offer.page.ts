@@ -42,12 +42,14 @@ export class EditOfferPage implements OnInit, OnDestroy {
         this.placesService
           .getPlace(placeId)
           .pipe(takeUntil(this._componentAlive$))
-          .subscribe(place => this.offer = place);
+          .subscribe(place => {
+            this.offer = place;
 
-        this.offerForm = this.formBuilder.group({
-          title: [this.offer.title, [Validators.required]],
-          description: [this.offer.description, [Validators.required, Validators.maxLength(180)]]
-        });
+            this.offerForm = this.formBuilder.group({
+              title: [this.offer.title, [Validators.required]],
+              description: [this.offer.description, [Validators.required, Validators.maxLength(180)]]
+            });
+          });
       });
   }
 
