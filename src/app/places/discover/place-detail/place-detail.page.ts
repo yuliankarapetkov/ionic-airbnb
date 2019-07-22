@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 import { NavController, ModalController, ActionSheetController } from '@ionic/angular';
 
@@ -12,8 +15,10 @@ import { CreateBookingComponent } from './../../../bookings/create-booking/creat
   templateUrl: './place-detail.page.html',
   styleUrls: ['./place-detail.page.scss'],
 })
-export class PlaceDetailPage implements OnInit {
+export class PlaceDetailPage implements OnInit, OnDestroy {
   place: Place;
+
+  private _componentAlive$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -33,8 +38,17 @@ export class PlaceDetailPage implements OnInit {
         }
 
         const placeId = paramMap.get('placeId');
-        this.place = this.placesService.getPlace(placeId);
+
+        this.placesService
+          .getPlace(placeId)
+          .pipe(takeUntil(this._componentAlive$))
+          .subscribe(place => this.place = place);
       });
+  }
+
+  ngOnDestroy(): void {
+    this._componentAlive$.next();
+    this._componentAlive$.complete();
   }
 
   async bookPlace(): Promise<void> {

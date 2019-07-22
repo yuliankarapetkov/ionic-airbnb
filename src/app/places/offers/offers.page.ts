@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { IonItemSliding } from '@ionic/angular';
 
@@ -11,8 +14,10 @@ import { Place } from '../place.model';
   templateUrl: './offers.page.html',
   styleUrls: ['./offers.page.scss'],
 })
-export class OffersPage implements OnInit {
+export class OffersPage implements OnInit, OnDestroy {
   offers: Place[];
+
+  private _componentAlive$ = new Subject<void>();
 
   constructor(
     private router: Router,
@@ -20,7 +25,15 @@ export class OffersPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.offers = this.placesService.places;
+    this.placesService
+      .places$
+      .pipe(takeUntil(this._componentAlive$))
+      .subscribe(places => this.offers = places);
+  }
+
+  ngOnDestroy(): void {
+    this._componentAlive$.next();
+    this._componentAlive$.complete();
   }
 
   edit(id: string, slidingItem: IonItemSliding): void {
