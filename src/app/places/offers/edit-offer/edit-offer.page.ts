@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { NavController } from '@ionic/angular';
+import { NavController, LoadingController } from '@ionic/angular';
 
 import { Place } from '../../place.model';
 import { PlacesService } from '../../places.service';
@@ -25,7 +25,9 @@ export class EditOfferPage implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private navController: NavController,
     private placesService: PlacesService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private loadingController: LoadingController
   ) { }
 
   ngOnInit() {
@@ -58,7 +60,19 @@ export class EditOfferPage implements OnInit, OnDestroy {
     this._componentAlive$.complete();
   }
 
-  updateOffer(): void {
-    console.log(this.offerForm.value)
+  async updateOffer(): Promise<void> {
+    const { id } = this.offer;
+    const { title, description } = this.offerForm.value;
+
+    const loadingElement = await this.loadingController.create({ message: 'Updating offer..' });
+    loadingElement.present();
+
+    this.placesService
+      .updatePlace(id, title, description)
+      .subscribe(() => {
+        loadingElement.dismiss();
+        this.offerForm.reset();
+        this.router.navigate(['/places/tabs/offers']);
+      });
   }
 }

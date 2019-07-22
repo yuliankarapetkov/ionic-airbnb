@@ -78,4 +78,20 @@ export class PlacesService {
         tap(places => this._places$.next([ ...places, place ]))
       );
   }
+
+  updatePlace(id: string, title: string, description: string): Observable<Place[]> {
+    return this.places$
+      .pipe(
+        take(1),
+        delay(1000),
+        tap(places => {
+          const index = places.findIndex(p => p.id === id);
+          const place = places[index];
+          const updatedPlaces = [...places];
+
+          updatedPlaces[index] = { ...place, title, description };
+          this._places$.next(updatedPlaces);
+        })
+      );
+  }
 }
