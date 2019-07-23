@@ -48,4 +48,13 @@ export class BookingService {
                 tap(bookings => this._bookings$.next([ ...bookings, booking ]))
             );
     }
+
+    removeBooking(bookingId: string): Observable<Booking[]> {
+        return this._bookings$
+            .pipe(
+                take(1),
+                delay(1000),
+                tap(bookings => this._bookings$.next(bookings.filter(b => b.id !== bookingId)))
+            );
+    }
 }

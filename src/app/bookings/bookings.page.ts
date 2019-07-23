@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
-import { IonItemSliding } from '@ionic/angular';
+import { IonItemSliding, LoadingController } from '@ionic/angular';
 
 import { BookingService } from './booking.service';
 import { Booking } from './booking.model';
@@ -19,7 +19,8 @@ export class BookingsPage implements OnInit, OnDestroy {
   private _componentAlive$ = new Subject<void>();
 
   constructor(
-    private _bookingService: BookingService
+    private _bookingService: BookingService,
+    private _loadingController: LoadingController
   ) { }
 
   ngOnInit() {
@@ -34,7 +35,14 @@ export class BookingsPage implements OnInit, OnDestroy {
     this._componentAlive$.complete();
   }
 
-  cancelBooking(id: string, slidingItem: IonItemSliding): void {
+  async cancelBooking(bookingId: string, slidingItem: IonItemSliding): Promise<void> {
     slidingItem.close();
+
+    const loadingElement = await this._loadingController.create({ message: 'Cancelling booking..' });
+    loadingElement.present();
+
+    this._bookingService
+      .removeBooking(bookingId)
+      .subscribe(() => loadingElement.dismiss());
   }
 }
