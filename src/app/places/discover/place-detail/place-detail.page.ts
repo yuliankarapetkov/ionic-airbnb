@@ -10,6 +10,7 @@ import { Place } from '../../place.model';
 import { PlacesService } from '../../places.service';
 import { CreateBookingComponent } from './../../../bookings/create-booking/create-booking.component';
 import { BookingService } from './../../../bookings/booking.service';
+import { AuthService } from './../../../auth/auth.service';
 
 @Component({
   selector: 'app-place-detail',
@@ -18,6 +19,7 @@ import { BookingService } from './../../../bookings/booking.service';
 })
 export class PlaceDetailPage implements OnInit, OnDestroy {
   place: Place;
+  isBookable = false;
 
   private _componentAlive$ = new Subject<void>();
 
@@ -28,7 +30,8 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
     private modalController: ModalController,
     private actionSheetController: ActionSheetController,
     private _bookingService: BookingService,
-    private _loadingController: LoadingController
+    private _loadingController: LoadingController,
+    private _authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -45,7 +48,10 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
         this.placesService
           .getPlace(placeId)
           .pipe(takeUntil(this._componentAlive$))
-          .subscribe(place => this.place = place);
+          .subscribe(place => {
+            this.place = place;
+            this.isBookable = this.place.userId !== this._authService.userId;
+          });
       });
   }
 
