@@ -4,11 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
-import { NavController, ModalController, ActionSheetController } from '@ionic/angular';
+import { NavController, ModalController, ActionSheetController, LoadingController } from '@ionic/angular';
 
 import { Place } from '../../place.model';
 import { PlacesService } from '../../places.service';
 import { CreateBookingComponent } from './../../../bookings/create-booking/create-booking.component';
+import { BookingService } from './../../../bookings/booking.service';
 
 @Component({
   selector: 'app-place-detail',
@@ -25,7 +26,9 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
     private navController: NavController,
     private placesService: PlacesService,
     private modalController: ModalController,
-    private actionSheetController: ActionSheetController
+    private actionSheetController: ActionSheetController,
+    private _bookingService: BookingService,
+    private _loadingController: LoadingController
   ) { }
 
   ngOnInit() {
@@ -71,25 +74,39 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
     actionSheetElement.present();
   }
 
-  openCreateBookingModal(mode: 'select' | 'random'): void {
+  async openCreateBookingModal(mode: 'select' | 'random'): Promise<void> {
     console.log(mode);
 
-    this.modalController
-      .create({
-        component: CreateBookingComponent,
-        componentProps: {
-          selectedPlace: this.place,
-          mode
-        }
-      })
-      .then(modalElement => {
-        modalElement.present();
-        return modalElement.onDidDismiss();
-      })
-      .then(resultData => {
-        if (resultData.role === 'confirm') {
-          console.log('BOOKED!', resultData.data);
-        }
-      });
+    const modalElement = await this.modalController
+    .create({
+      component: CreateBookingComponent,
+      componentProps: {
+        selectedPlace: this.place,
+        mode
+      }
+    });
+
+    modalElement.present();
+    const event = await modalElement.onDidDismiss();
+
+    if (event.role === 'confirm') {
+      const { firstName, lastName, guestNumber, fromDate, toDate } = event.data.booking;
+
+      const loadingElement = await this._loadingController.create({ message: 'Booking place..' });
+      loadingElement.present();
+
+      this._bookingService
+        .createBooking(
+          this.place.id,
+          this.place.title,
+          this.place.imageUrl,
+          firstName,
+          lastName,
+          guestNumber,
+          fromDate,
+          toDate
+        )
+        .subscribe(() => loadingElement.dismiss());
+    }
   }
 }
