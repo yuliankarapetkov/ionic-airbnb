@@ -1,4 +1,13 @@
-<ion-button color="primary" (click)="pickLocation()">
-  <ion-icon name="map" slot="start"></ion-icon>
-  <ion-label>Pick a location</ion-label>
-</ion-button>
+<div class="location-picker">
+
+  <ion-img *ngIf="location; else noLocation" [src]="location?.imageUrl" class="location-picker__image">
+  </ion-img>
+
+  <ng-template #noLocation>
+    <ion-button color="primary" (click)="pickLocation()">
+      <ion-icon name="map" slot="start"></ion-icon>
+      <ion-label>Pick a location</ion-label>
+    </ion-button>
+  </ng-template>
+
+</div>
