@@ -66,10 +66,14 @@ export class PlaceDetailPage implements OnInit, OnDestroy {
         header: 'Choose an action',
         buttons: [{
             text: 'Select date',
-            handler: () => this.openCreateBookingModal('select')
+            handler: () => {
+              this.openCreateBookingModal('select');
+            }
           }, {
             text: 'Random date',
-            handler: () => this.openCreateBookingModal('random')
+            handler: () => {
+              this.openCreateBookingModal('random');
+            }
           }, {
             text: 'Cancel',
             role: 'cancel'
