@@ -21,6 +21,11 @@
             "tsConfig": "src/tsconfig.app.json",
             "assets": [
               {
+                "glob": "**/*.svg",
+                "input": "node_modules/@ionic/pwa-elements/dist/ionicpwaelements/icons",
+                "output": "icons"
+              },
+              {
                 "glob": "**/*",
                 "input": "src/assets",
                 "output": "assets"
